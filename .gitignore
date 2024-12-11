@@ -1,0 +1,10 @@
+
+**/clab-*
+**/.*clab.y*ml.bak
+**/*.y*ml.bak
+.vscode
+.DS_Store
+.idea
+license.key
+.devcontainer/private-*
+

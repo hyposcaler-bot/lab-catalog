@@ -1,0 +1,36 @@
+---
+role: spine
+interfaces:
+  Loopback0:
+    address: '192.168.101.2/32'
+  Ethernet1:
+    address: '10.10.10.8/31'
+  Ethernet2:
+    address: '10.10.10.10/31'
+  Ethernet3:
+    address: '10.10.10.12/31'
+  Ethernet4:
+    address: '10.10.10.14/31'
+  Ethernet5:
+    address: '10.10.20.8/31'
+  Ethernet6:
+    address: '10.10.20.10/31'
+bgp:
+  as_number: 65502
+  router_id: '192.168.101.2'
+  neighbors:
+    10.10.10.9:
+       remote_as: 64521
+    10.10.10.11:
+       remote_as: 64522
+    10.10.10.13:
+       remote_as: 64523
+    10.10.10.15:
+       remote_as: 64524
+    10.10.20.9:
+       remote_as: 64525
+    10.10.20.11:
+       remote_as: 64526
+vxlan:
+  vlans:
+  vrfs:

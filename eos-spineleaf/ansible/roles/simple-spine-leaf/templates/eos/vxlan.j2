@@ -1,0 +1,11 @@
+{% if role == 'leaf' %}
+!
+interface Vxlan1
+   vxlan source-interface Loopback0
+   vxlan udp-port 4789
+{% if vxlan.vlans is iterable %}
+{% for vlan in vxlan.vlans %}      
+   vxlan vlan {{ vlan }} vni {{ vxlan.vlans[vlan].vni }}
+{% endfor %}
+{% endif %}
+{% endif %}

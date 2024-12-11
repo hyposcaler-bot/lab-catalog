@@ -1,0 +1,71 @@
+name: eos-spine-leaf
+prefix: ""
+
+topology:
+
+  kinds:
+    ceos:
+      image: ceos:4.29.2F
+      labels:
+        ansible-group: eos
+    linux:
+      image: ghcr.io/srl-labs/network-multitool
+
+  nodes:
+    spine1:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.101
+    spine2:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.102
+    leaf1:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.11
+    leaf2:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.12
+    leaf3:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.13
+    leaf4:
+      kind: ceos
+      mgmt-ipv4: 172.20.20.14
+
+    host1:
+      kind: linux
+      mgmt-ipv4: 172.20.20.21
+      exec:
+        - ip address add 172.17.0.1/24 dev eth1
+        - ip -6 address add 2002::172:17:0:1/96 dev eth1
+    host2:
+      kind: linux
+      mgmt-ipv4: 172.20.20.22
+      exec:
+        - ip address add 172.17.0.2/24 dev eth1
+        - ip -6 address add 2002::172:17:0:2/96 dev eth1
+    host3:
+      kind: linux
+      mgmt-ipv4: 172.20.20.23
+      exec:
+        - ip address add 172.17.0.3/24 dev eth1
+        - ip -6 address add 2002::172:17:0:3/96 dev eth1
+    host4:
+      kind: linux
+      mgmt-ipv4: 172.20.20.24
+      exec:
+        - ip address add 172.17.0.4/24 dev eth1
+        - ip -6 address add 2002::172:17:0:4/96 dev eth1
+
+  links:
+    - endpoints: ["leaf1:eth11", "spine1:eth1"]
+    - endpoints: ["leaf1:eth12", "spine2:eth1"]
+    - endpoints: ["leaf2:eth11", "spine1:eth2"]
+    - endpoints: ["leaf2:eth12", "spine2:eth2"]
+    - endpoints: ["leaf3:eth11", "spine1:eth3"]
+    - endpoints: ["leaf3:eth12", "spine2:eth3"]
+    - endpoints: ["leaf4:eth11", "spine1:eth4"]
+    - endpoints: ["leaf4:eth12", "spine2:eth4"]
+    - endpoints: ["leaf1:eth1", "host1:eth1"]
+    - endpoints: ["leaf2:eth1", "host2:eth1"]
+    - endpoints: ["leaf3:eth1", "host3:eth1"]
+    - endpoints: ["leaf4:eth1", "host4:eth1"]

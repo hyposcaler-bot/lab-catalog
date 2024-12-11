@@ -1,0 +1,27 @@
+---
+role: leaf
+interfaces:
+  Loopback0:
+    address: '192.168.100.2/32'
+  Ethernet11:
+    address: '10.10.10.3/31'
+  Ethernet12:
+    address: '10.10.10.11/31'
+bgp:
+  as_number: 64522
+  router_id: '192.168.100.2'
+  neighbors:
+    10.10.10.2:
+       remote_as: 65501
+    10.10.10.10:
+       remote_as: 65502
+vxlan:
+  vlans:
+    100:
+      vni: 10100
+      interfaces:
+        - 'Ethernet1'
+      rd: '192.168.100.2:10100'
+      export_rt: '100:100'
+      import_rt: '100:100'
+  vrfs:

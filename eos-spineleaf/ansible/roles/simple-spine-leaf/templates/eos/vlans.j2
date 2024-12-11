@@ -1,0 +1,10 @@
+{% if vxlan.vlans is iterable %}
+{% for vlan in vxlan.vlans %}      
+vlan {{ vlan }}
+{% for interface in vxlan.vlans[vlan].interfaces %}
+interface {{ interface }}
+   switchport mode access
+   switchport access vlan {{ vlan }}
+{% endfor %}
+{% endfor %}
+{% endif %}

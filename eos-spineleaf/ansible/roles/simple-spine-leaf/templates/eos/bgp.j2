@@ -1,0 +1,41 @@
+ip routing vrf default
+router bgp {{ bgp.as_number }}
+   router-id {{ bgp.router_id }}
+   no bgp default ipv4-unicast
+   bgp log-neighbor-changes
+   distance bgp 20 200 200
+   maximum-paths 4 ecmp 64
+{% if bgp.neighbors is iterable %}
+{% for neighbor in bgp.neighbors %}
+   neighbor {{ neighbor }} remote-as {{ bgp.neighbors[neighbor].remote_as }}
+   neighbor {{ neighbor }} send-community extended
+{% endfor %}
+{% endif %}
+   !
+   address-family ipv4
+{% for interface in interfaces -%}
+      network {{interfaces[interface].address}}
+{% endfor %}
+{% if bgp.neighbors is iterable %}
+{% for neighbor in bgp.neighbors %}      
+      neighbor {{ neighbor }} activate
+{% endfor %}
+{% endif %}
+   !
+   address-family evpn
+{% if bgp.neighbors is iterable %}
+{% for neighbor in bgp.neighbors %}      
+      neighbor {{ neighbor }} activate
+      neighbor {{ neighbor }} next-hop-unchanged
+{% endfor %}
+{% endif %}
+{% if vxlan.vlans is iterable %}
+{% for vlan in vxlan.vlans %}
+   !      
+   vlan {{ vlan }}
+      rd {{ vxlan.vlans[vlan].rd }}
+      route-target import evpn domain all {{ vxlan.vlans[vlan].import_rt }}
+      route-target export evpn domain all {{ vxlan.vlans[vlan].export_rt }}
+      redistribute learned
+{% endfor %}
+{% endif %}
